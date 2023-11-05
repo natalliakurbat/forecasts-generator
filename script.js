@@ -9,15 +9,17 @@ const forecast = ['Сегодня ночью ты выспишься', 'Завт
 ];
 
 
-sendButton.addEventListener('click', function() {
+sendButton.addEventListener('click', getClick);
+let count = 0; // объявим переменную-счетчик
 
-    const newForecast = document.querySelector("h1");
-    newForecast.innerText = `${getRandomText()}`;
+function getClick() {
 
-    const newProbability = document.querySelector("p");
-    newProbability.innerText = `Вероятность: ${getRandomInt()}`;
+    if (count == 0) { //при первом клике выполняется след условие 
+        const newForecast = document.querySelector("h1");
+        newForecast.innerText = `${getRandomText()}`;
 
-    sendButton.addEventListener('click', function() {
+        const newProbability = document.querySelector("p");
+        newProbability.innerText = `Вероятность: ${getRandomInt()}`;
 
         function makeForecastItemByTemplate(forecast, probability) {
             const lastForecast = forecastList.content.cloneNode(true);
@@ -28,12 +30,35 @@ sendButton.addEventListener('click', function() {
             return lastForecast;
         }
 
-        const listForecast = makeForecastItemByTemplate(newForecast, newProbability);
+        const listForecast = makeForecastItemByTemplate(newForecast.textContent, newProbability.textContent);
         saveForecasts.prepend(listForecast);
 
-    });
+        count++; //и увеличиваем переменную счетчика на 1 
 
-});
+    } else { // при клике не равном 0 выполняется другое условие 
+
+        const newForecast = document.querySelector("h1");
+        newForecast.innerText = `${getRandomText()}`;
+
+        const newProbability = document.querySelector("p");
+        newProbability.innerText = `Вероятность: ${getRandomInt()}`;
+
+        function makeForecastItemByTemplate(forecast, probability) {
+            const lastForecast = forecastList.content.cloneNode(true);
+
+            lastForecast.querySelector('h3').textContent = forecast;
+            lastForecast.querySelector('p').textContent = probability;
+
+            return lastForecast;
+        }
+
+        const listForecast = makeForecastItemByTemplate(newForecast.textContent, newProbability.textContent);
+        saveForecasts.prepend(listForecast);
+
+        count = 0;
+
+    }
+};
 
 function getRandomText() { //функция генерации текста 
     const randomIndex = Math.floor(Math.random() * forecast.length); // генерируем случайный индекс от 0 до длины массива
